@@ -1,0 +1,76 @@
+apply plugin: 'groovy'
+apply plugin: 'maven-publish'
+
+
+dependencies {
+    //gradle sdk
+    implementation gradleApi()
+    //groovy sdk
+    implementation localGroovy()
+
+    implementation 'com.android.tools.build:gradle:7.0.2'
+
+    implementation 'org.ow2.asm:asm:9.0'
+    implementation 'org.ow2.asm:asm-util:9.0'
+    implementation 'org.ow2.asm:asm-commons:9.0'
+}
+
+//repositories {
+//    mavenCentral()
+//}
+
+// 打包到本地或者远程maven库
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            //这个就是配置这个自定义插件的classpath
+//            pom.groupId = 'com.trans.plugin'
+//            pom.artifactId = 'transAOPPlugin'
+//            pom.version = '1.0.0'
+//            //提交到远程服务器
+//            // repository(url:"服务器地址"){
+//            //    authentication(userName:'admin',password:'admin')
+//            // }
+//            //本地maven地址
+//            repository(url: uri('../plugins'))
+//        }
+//    }
+//}
+
+afterEvaluate {
+    publishing {
+        //发布的 jar 包配置
+        publications {
+            release(MavenPublication) {
+                groupId = 'com.trans.plugin'
+                artifactId = 'transAOPPlugin'
+                version = '1.0.0'
+//                //aar 文件
+//                def projectName = project.getName()
+//                artifact "build/outputs/aar/${projectName}-release.aar"
+//
+//                pom.withXml{
+//                    def dependenciesNode = asNode().appendNode("dependencies")
+//                    configurations.implementation.allDependencies.forEach(){
+//                        Dependency dependency ->
+//                            if (dependency.version != "unspecified" && dependency.name != "unspecified"){
+//                                def dependencyNode = dependenciesNode.appendNode('dependency')
+//                                dependencyNode.appendNode('groupId', dependency.group)
+//                                dependencyNode.appendNode('artifactId', dependency.name)
+//                                dependencyNode.appendNode('version', dependency.version)
+//                            }
+//                    }
+//                }
+
+            }
+        }
+        //仓库地址配置
+        repositories {
+            maven {
+                // test, upload local maven repository
+                //url = "file:" + new File(project.rootProject.rootDir, "local_test_repo").path
+                url = "../plugins"
+            }
+        }
+    }
+}
